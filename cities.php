@@ -68,6 +68,65 @@
             <a href="#" class="btn btn-dark btn-lg">Weather</a>
             <a href="#" class="btn btn-dark btn-lg">Temperature Converter</a>
         </div>
+        <div>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                Country Name: <input type="text" name="CountryName">
+                <input type="submit" name="submit" value="Submit">
+            </form>
+
+
+            <?php
+
+                if (!isset($_SERVER['PHP_AUTH_USER']))
+                {
+                    header('WWW-Authenticate: Basic realm="My Realm"');
+                    header('HTTP/1.0 401 Unauthorized');
+                    echo 'Text to send if user hits Cancel button';
+                    exit;
+                }
+                else
+                {
+                    echo "<p>Hello {$_SERVER['PHP_AUTH_USER']}.</p>";
+                    echo "<p>You have entered your password.</p>";
+                }
+                
+                $proxyhost = "152.118.24.10";
+                $proxyport = "8080";
+                $proxyusername = $_SERVER['PHP_AUTH_USER'];
+                $proxypassword = $_SERVER['PHP_AUTH_PW'];
+
+                var_dump($_POST["CountryName"]);
+                require_once('lib/nusoap.php');
+                $client = new nusoap_client('http://http://www.webservicex.net/globalweather.asmx',
+                        $proxyhost, $proxyport, $proxyusername, $proxypassword);
+
+                $GetCitiesByCountry = array ('CountryName' => $_POST["CountryName"]);
+
+
+                
+                $response = $client->call('GetCitiesByCountry', array('GetCitiesByCountry' => $GetCitiesByCountry));
+                var_dump($response);
+                echo (string)$response;
+                
+                if ($client->fault) {
+                    echo '<h2>Fault</h2><pre>';
+                    print_r($result);
+                    echo '</pre>';
+                } else {
+                    // Check for errors
+                    $err = $client->getError();
+                    if ($err) {
+                        // Display the error
+                        echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                    } else {
+                        // Display the result
+                        echo '<h2>Result</h2><pre>';
+                        print_r($result);
+                        echo '</pre>';
+                    }
+                }
+            ?>
+        </div>
     </header>
 
 
@@ -130,6 +189,7 @@
         });
     });
     </script>
+
 
 </body>
 
