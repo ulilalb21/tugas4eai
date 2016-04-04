@@ -37,7 +37,7 @@
     <!-- Header -->
     <header id="top" class="header">
     	<div class="text-vertical-center">
-    		<h1>Weather</h1>
+    		<h1>Temperature Converter</h1>
     		<div class="col-md-12">
     			<form class="form-inline" method="post" enctype="multipart/form-data" action="" id='converttemp'>
 				  <div class="input-group">
@@ -49,20 +49,21 @@
     		</div>
     	
     	<?php
-    		if(true){
+    		if($_POST){
 
     			require_once('lib/nusoap.php');
 
-				$client = new nusoap_client('http://www.webservicex.net/globalweather.asmx?WSDL', true);
+				$client = new nusoap_client('http://www.webservicex.net/ConvertTemperature.asmx?wsdl', true);
 
 				$err = $client->getError();
 				if ($err) {
 					echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 				}
 				// Doc/lit parameters get wrapped
-				$param = array('CityName' => 'Jakarta', 'CountryName' => 'Indonesia');
-				$result = $client->call('GetWeather', array('parameters' => $param));
-				
+				$param = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeFahrenheit');
+				$param2 = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeReaumur');
+				$result = $client->call('ConvertTemp', array('parameters' => $param));
+				$result2 = $client->call('ConvertTemp', array('parameters' => $param2));
 
 				// Check for a fault
 				if ($client->fault) {
@@ -76,7 +77,9 @@
 						// Display the error
 						echo '<h2>Error</h2><pre>' . $err . '</pre>';
 					} else {
-						echo $result;
+						echo "<h2>";
+						echo $_POST['temperature']."&deg;C = ".$result['ConvertTempResult']."&deg;F = ".$result2['ConvertTempResult']."&deg;R";
+						echo "</h2>";
 					}
 				}
     		}
