@@ -19,7 +19,7 @@
                 <a href="tempconverter.php" onclick = $("#menu-close").click(); >Temperature Converter</a>
             </li>
             <li>
-                <a href="/" onclick = $("#menu-close").click(); >Contact</a>
+                <a href="#about" onclick = $("#menu-close").click(); >About Us</a>
             </li>
         </ul>
     </nav>

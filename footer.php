@@ -1,5 +1,5 @@
 <!-- Footer -->
-    <footer>
+    <footer id="about">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
@@ -7,13 +7,13 @@
                     </h4>
                     <p>Fakultas Ilmu Komputer<br>Universitas Indonesia</p>
                     <ul class="list-unstyled">
-                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">muhammad.ulil21@ui.ac.id</a>
+                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:muhammad.ulil21@ui.ac.id">muhammad.ulil21@ui.ac.id</a>
                         </li>
-                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">nitto.sahadi@ui.ac.id</a>
+                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:nitto.sahadi@ui.ac.id">nitto.sahadi@ui.ac.id</a>
                         </li>
                     </ul>
-                    <br>
                     <hr class="small">
+                    <p class="text-muted">Web services provided by <a href="http://webservicex.net">Webservicex.net</a></p>
                     <p class="text-muted">Copyright &copy; Kelompok 02 EAI 2016</p>
                 </div>
             </div>

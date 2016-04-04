@@ -38,37 +38,37 @@
     <header id="top" class="header">
     	<div class="text-vertical-center">
     		<h1>Weather</h1>
+    		<h4>See weather information from anywhere around the world</h4>
     		<div class="col-md-12">
     			<form class="form-inline" method="post" enctype="multipart/form-data" action="" id='converttemp'>
-				  <div class="input-group">
-				    <input type="number" class="form-control" id="temperature" placeholder="Temperature" name="temperature">
-				    <span class="input-group-addon" id="basic-addon2">&deg;C</span>
+				  <div class="form-group">
+				    <input type="text" class="form-control" id="cityname" placeholder="City" name="cityname">
+				    <input type="text" class="form-control" id="countryname" placeholder="Country" name="countryname">
 				  </div>
-				  <button type="submit" class="btn btn-default">Convert!</button>
+				  <button type="submit" class="btn btn-primary">Get Weather</button>
 				</form>
-    		</div>
+    		
     	
     	<?php
-    		if(true){
+    		if($_POST){
 
     			require_once('lib/nusoap.php');
 
-				$client = new nusoap_client('http://www.webservicex.net/globalweather.asmx?WSDL', true);
+				$client = new nusoap_client('http://www.webservicex.net/globalweather.asmx?wsdl', true);
 
 				$err = $client->getError();
 				if ($err) {
 					echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 				}
 				// Doc/lit parameters get wrapped
-				$param = array('CityName' => 'Jakarta', 'CountryName' => 'Indonesia');
+				$param = array('CityName' => $_POST['cityname'], 'CountryName' => $_POST['countryname']);
 				$result = $client->call('GetWeather', array('parameters' => $param));
 				
 
 				// Check for a fault
 				if ($client->fault) {
-					echo '<h2>Fault</h2><pre>';
-					print_r($result);
-					echo '</pre>';
+					echo '<h2>Fault</h2>';
+					print_r($result['faultstring']);
 				} else {
 					// Check for errors
 					$err = $client->getError();
@@ -76,11 +76,14 @@
 						// Display the error
 						echo '<h2>Error</h2><pre>' . $err . '</pre>';
 					} else {
-						echo $result;
+						echo '<h2>Weather Information for '.$_POST['cityname'].', '.$_POST['countryname'].'</h2>';
+						echo "<h3>".$result['GetWeatherResult']."</h3>";
+						print_r($result);
 					}
 				}
     		}
     	?>
+    		</div>
         </div>
     </header>
 

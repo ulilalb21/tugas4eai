@@ -32,43 +32,12 @@
 
 <body>
 
-    <!-- Navigation -->
-    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li class="sidebar-brand">
-                <a href="#top"  onclick = $("#menu-close").click(); >Tugas 4 EAI</a>
-            </li>
-            <li>
-                <a href="#top" onclick = $("#menu-close").click(); >Home</a>
-            </li>
-            <li>
-                <a href="#about" onclick = $("#menu-close").click(); >Cities</a>
-            </li>
-            <li>
-                <a href="#services" onclick = $("#menu-close").click(); >Weather</a>
-            </li>
-            <li>
-                <a href="#portfolio" onclick = $("#menu-close").click(); >Temperature Converter</a>
-            </li>
-            <li>
-                <a href="#contact" onclick = $("#menu-close").click(); >Contact</a>
-            </li>
-        </ul>
-    </nav>
+    <?php include 'nav.php'; ?>
 
     <!-- Header -->
     <header id="top" class="header">
-        <div class="text-vertical-top">
-            <h1>Tugas 4 EAI</h1>
-            <h3>Kelompok 02</h3>
-            <br>
-            <a href="cities.php" class="btn btn-dark btn-lg">View Cities</a>
-            <a href="#" class="btn btn-dark btn-lg">Weather</a>
-            <a href="#" class="btn btn-dark btn-lg">Temperature Converter</a>
-        </div>
-        <div>
+        <div class='text-vertical-center'>
+            <h1>Get Cities</h1>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 Country Name: <input type="text" name="CountryName">
                 <input type="submit" name="submit" value="Submit">
@@ -76,120 +45,36 @@
 
 
             <?php
-
-                if (!isset($_SERVER['PHP_AUTH_USER']))
-                {
-                    header('WWW-Authenticate: Basic realm="My Realm"');
-                    header('HTTP/1.0 401 Unauthorized');
-                    echo 'Text to send if user hits Cancel button';
-                    exit;
-                }
-                else
-                {
-                    echo "<p>Hello {$_SERVER['PHP_AUTH_USER']}.</p>";
-                    echo "<p>You have entered your password.</p>";
-                }
-                
-                $proxyhost = "152.118.24.10";
-                $proxyport = "8080";
-                $proxyusername = $_SERVER['PHP_AUTH_USER'];
-                $proxypassword = $_SERVER['PHP_AUTH_PW'];
-
-                var_dump($_POST["CountryName"]);
+            if($_POST){
                 require_once('lib/nusoap.php');
-                $client = new nusoap_client('http://http://www.webservicex.net/globalweather.asmx',
-                        $proxyhost, $proxyport, $proxyusername, $proxypassword);
+                $client = new nusoap_client('http://www.webservicex.net/globalweather.asmx?wsdl',true);
 
-                $GetCitiesByCountry = array ('CountryName' => $_POST["CountryName"]);
+                $GetCitiesByCountry = array('CountryName' => $_POST["CountryName"]);
 
-
-                
-                $response = $client->call('GetCitiesByCountry', array('GetCitiesByCountry' => $GetCitiesByCountry));
-                var_dump($response);
-                echo (string)$response;
-                
+                $response = $client->call('GetCitiesByCountry', array('parameters' => $GetCitiesByCountry));                
                 if ($client->fault) {
-                    echo '<h2>Fault</h2><pre>';
-                    print_r($result);
-                    echo '</pre>';
+                    echo '<h2>Fault</h2>';
+                    echo $response['faultstring'];
                 } else {
                     // Check for errors
                     $err = $client->getError();
                     if ($err) {
                         // Display the error
-                        echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                        echo '<h2>Error</h2> ' . $err;
                     } else {
                         // Display the result
-                        echo '<h2>Result</h2><pre>';
-                        print_r($result);
-                        echo '</pre>';
+                        echo '<h2>Result</h2>';
+                        print_r($response);
                     }
                 }
+            }
+                
             ?>
         </div>
     </header>
 
 
-    <!-- Footer -->
-<!--     <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10 col-lg-offset-1 text-center">
-                    <h4><strong>Muhammad Ulil Albab (1206246585) | Nitto Sahadi (1501234567)</strong>
-                    </h4>
-                    <p>Fakultas Ilmu Komputer<br>Universitas Indonesia</p>
-                    <ul class="list-unstyled">
-                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">muhammad.ulil21@ui.ac.id</a>
-                        </li>
-                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">nitto.sahadi@ui.ac.id</a>
-                        </li>
-                    </ul>
-                    <br>
-                    <hr class="small">
-                    <p class="text-muted">Copyright &copy; Kelompok 02 EAI 2016</p>
-                </div>
-            </div>
-        </div>
-    </footer> -->
-
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script>
-    // Closes the sidebar menu
-    $("#menu-close").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-
-    // Opens the sidebar menu
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-
-    // Scrolls to the selected menu item on the page
-    $(function() {
-        $('a[href*=#]:not([href=#])').click(function() {
-            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
-
-                var target = $(this.hash);
-                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-                if (target.length) {
-                    $('html,body').animate({
-                        scrollTop: target.offset().top
-                    }, 1000);
-                    return false;
-                }
-            }
-        });
-    });
-    </script>
-
+    <?php include 'footer.php'; ?>
 
 </body>
 

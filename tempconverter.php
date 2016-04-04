@@ -38,52 +38,51 @@
     <header id="top" class="header">
     	<div class="text-vertical-center">
     		<h1>Temperature Converter</h1>
-    		<div class="col-md-12">
+    		<h4>Convert temperature from Celsius to Fahrenheit and Reaumur</h4>
+    		<div class="col-sm-12">
     			<form class="form-inline" method="post" enctype="multipart/form-data" action="" id='converttemp'>
-				  <div class="input-group">
+				  <div class="input-group form-group">
 				    <input type="number" class="form-control" id="temperature" placeholder="Temperature" name="temperature">
 				    <span class="input-group-addon" id="basic-addon2">&deg;C</span>
 				  </div>
-				  <button type="submit" class="btn btn-default">Convert!</button>
+				  <div class='form-group'><button type="submit" class="btn btn-primary">Convert!</button></div>
 				</form>
-    		</div>
-    	
-    	<?php
-    		if($_POST){
+		    	<?php
+		    		if($_POST){
 
-    			require_once('lib/nusoap.php');
+		    			require_once('lib/nusoap.php');
 
-				$client = new nusoap_client('http://www.webservicex.net/ConvertTemperature.asmx?wsdl', true);
+						$client = new nusoap_client('http://www.webservicex.net/ConvertTemperature.asmx?wsdl', true);
 
-				$err = $client->getError();
-				if ($err) {
-					echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-				}
-				// Doc/lit parameters get wrapped
-				$param = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeFahrenheit');
-				$param2 = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeReaumur');
-				$result = $client->call('ConvertTemp', array('parameters' => $param));
-				$result2 = $client->call('ConvertTemp', array('parameters' => $param2));
+						$err = $client->getError();
+						if ($err) {
+							echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+						}
+						// Doc/lit parameters get wrapped
+						$param = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeFahrenheit');
+						$param2 = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeReaumur');
+						$result = $client->call('ConvertTemp', array('parameters' => $param));
+						$result2 = $client->call('ConvertTemp', array('parameters' => $param2));
 
-				// Check for a fault
-				if ($client->fault) {
-					echo '<h2>Fault</h2><pre>';
-					print_r($result);
-					echo '</pre>';
-				} else {
-					// Check for errors
-					$err = $client->getError();
-					if ($err) {
-						// Display the error
-						echo '<h2>Error</h2><pre>' . $err . '</pre>';
-					} else {
-						echo "<h2>";
-						echo $_POST['temperature']."&deg;C = ".$result['ConvertTempResult']."&deg;F = ".$result2['ConvertTempResult']."&deg;R";
-						echo "</h2>";
-					}
-				}
-    		}
-    	?>
+						// Check for a fault
+						if ($client->fault) {
+							echo '<h2>Fault</h2>';
+							print_r($result['faultstring']);
+						} else {
+							// Check for errors
+							$err = $client->getError();
+							if ($err) {
+								// Display the error
+								echo '<h2>Error</h2><pre>' . $err . '</pre>';
+							} else {
+								echo "<h2>";
+								echo $_POST['temperature']."&deg;C = ".$result['ConvertTempResult']."&deg;F = ".$result2['ConvertTempResult']."&deg;R";
+								echo "</h2>";
+							}
+						}
+		    		}
+		    	?>
+	    	</div>
         </div>
     </header>
 
