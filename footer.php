@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
-                    <h4><strong>Muhammad Ulil Albab (1206246585) | Nitto Sahadi (1501234567)</strong>
+                    <h4><strong>Muhammad Ulil Albab (1206246585) | Nitto Sahadi (1506811865)</strong>
                     </h4>
                     <p>Fakultas Ilmu Komputer<br>Universitas Indonesia</p>
                     <ul class="list-unstyled">

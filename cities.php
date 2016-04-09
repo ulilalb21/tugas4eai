@@ -49,9 +49,9 @@
                 require_once('lib/nusoap.php');
                 $client = new nusoap_client('http://www.webservicex.net/globalweather.asmx?wsdl',true);
 
-                $GetCitiesByCountry = array('CountryName' => $_POST["CountryName"]);
+                //$GetCitiesByCountry = array('CountryName' => $_POST["CountryName"]);
 
-                $response = $client->call('GetCitiesByCountry', array('parameters' => $GetCitiesByCountry));                
+                $response = $client->call('GetCitiesByCountry', array('CountryName' => $_POST["CountryName"]));                
                 if ($client->fault) {
                     echo '<h2>Fault</h2>';
                     echo $response['faultstring'];
@@ -64,7 +64,12 @@
                     } else {
                         // Display the result
                         echo '<h2>Result</h2>';
-                        print_r($response);
+                        if (strlen($response['GetCitiesByCountryResult']) < 15 )
+                        {
+                            echo "Sorry, country ".$_POST["CountryName"]." not found.";
+                        }
+                        else
+                            echo $response['GetCitiesByCountryResult'];
                     }
                 }
             }
