@@ -78,7 +78,7 @@
 					} else {
 						echo '<h2>Weather Information for '.$_POST['cityname'].', '.$_POST['countryname'].'</h2>';
 						echo "<h3>".$result['GetWeatherResult']."</h3>";
-						print_r($result);
+						//print_r($result);
 					}
 				}
     		}
