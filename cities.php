@@ -62,14 +62,39 @@
                         // Display the error
                         echo '<h2>Error</h2> ' . $err;
                     } else {
+                        //formatting result
+                        $xml = simplexml_load_string($response['GetCitiesByCountryResult']);
+                        if (count($xml->Table) < 150)
+                            $column = ceil(count($xml->Table) / 25);
+                        else 
+                            $column = ceil(count($xml->Table) / 250);
+                        $columnSize = floor(12 / $column);
+
                         // Display the result
                         echo '<h2>Result</h2>';
-                        if (strlen($response['GetCitiesByCountryResult']) < 15 )
+                        if (sizeof($xml->Table) < 1 )
                         {
                             echo "Sorry, country ".$_POST["CountryName"]." not found.";
                         }
                         else
-                            echo $response['GetCitiesByCountryResult'];
+                        {
+                            echo '<h3>Cities in '.$_POST["CountryName"].':</h3>';
+                            echo '<div class = "row">';
+                            for ($i=0; $i<$column; $i++)
+                            {
+                                echo '<div class="col-md-'.$columnSize.'">';
+                                if (count($xml->Table) < 150)
+                                    $col = 25;
+                                else
+                                    $col = 250;
+                                for ($j=$i*$col; $j<($i + 1)*$col; $j++)
+                                    if ($j < count($xml->Table))
+                                        echo $xml->Table[$j]->City.'<br><br>';
+                                    else break;
+                                echo '</div>';
+                            }
+                            echo '</div>';
+                        }
                     }
                 }
             }
