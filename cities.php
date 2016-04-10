@@ -62,14 +62,32 @@
                         // Display the error
                         echo '<h2>Error</h2> ' . $err;
                     } else {
+                        //formatting result
+                        $xml = simplexml_load_string($response['GetCitiesByCountryResult']);
+                        $column = ceil(count($xml->Table) / 50);
+                        $columnSize = floor(12 / $column);
+
                         // Display the result
                         echo '<h2>Result</h2>';
-                        if (strlen($response['GetCitiesByCountryResult']) < 15 )
+                        if (sizeof($xml->Table) < 1 )
                         {
                             echo "Sorry, country ".$_POST["CountryName"]." not found.";
                         }
                         else
-                            echo $response['GetCitiesByCountryResult'];
+                        {
+                            echo '<h3>Cities in '.$_POST["CountryName"].':</h3>';
+                            echo '<div class = "row">';
+                            for ($i=0; $i<$column; $i++)
+                            {
+                                echo '<div class="col-md-'.$columnSize.'">';
+                                for ($j=$i*50; $j<($i + 1)*50; $j++)
+                                    if ($j < count($xml->Table))
+                                        echo $xml->Table[$j]->City.'<br>';
+                                    else break;
+                                echo '</div>';
+                            }
+                            echo '</div>';
+                        }
                     }
                 }
             }
