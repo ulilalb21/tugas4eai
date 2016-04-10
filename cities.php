@@ -38,9 +38,12 @@
     <header id="top" class="header">
         <div class='text-vertical-center'>
             <h1>Get Cities</h1>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                Country Name: <input type="text" name="CountryName">
-                <input type="submit" name="submit" value="Submit">
+            <h4>View All Major Cities in a Country</h4>
+            <form class="form-inline" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+              <div class="form-group">
+                <input type="text" class="form-control" id="countryname" placeholder="Country" name="CountryName">
+              </div>
+              <button type="submit" class="btn btn-primary">Get Cities</button>
             </form>
 
 
@@ -64,11 +67,7 @@
                     } else {
                         //formatting result
                         $xml = simplexml_load_string($response['GetCitiesByCountryResult']);
-                        if (count($xml->Table) < 150)
-                            $column = ceil(count($xml->Table) / 25);
-                        else 
-                            $column = ceil(count($xml->Table) / 250);
-                        $columnSize = floor(12 / $column);
+                        
 
                         // Display the result
                         echo '<h2>Result</h2>';
@@ -78,6 +77,11 @@
                         }
                         else
                         {
+                            if (count($xml->Table) < 150)
+                                $column = ceil(count($xml->Table) / 25);
+                            else 
+                                $column = ceil(count($xml->Table) / 250);
+                            $columnSize = floor(12 / $column);
                             echo '<h3>Cities in '.$_POST["CountryName"].':</h3>';
                             echo '<div class = "row">';
                             for ($i=0; $i<$column; $i++)

@@ -78,8 +78,9 @@
 					if ($err) {
 						// Display the error
 						echo '<h2>Error</h2><pre>' . $err . '</pre>';
-					} else {
-						echo '<h2>Weather Information for '.$_POST['cityname'].', '.$_POST['countryname'].'</h2>';
+					} 
+                    else {
+						echo '<h2>Weather Information: '.$_POST['cityname'].' '.$_POST['countryname'].'</h2>';
 						echo "<h3>".$result['GetWeatherResult']."</h3>";
 					}
 				}
