@@ -63,6 +63,9 @@
 				// Doc/lit parameters get wrapped
 				$param = array('CityName' => $_POST['cityname'], 'CountryName' => $_POST['countryname']);
 				$result = $client->call('GetWeather', array('parameters' => $param));
+                $header = $client->getHeaders();
+
+                print_r($header);
 				
 
 				// Check for a fault
@@ -78,7 +81,6 @@
 					} else {
 						echo '<h2>Weather Information for '.$_POST['cityname'].', '.$_POST['countryname'].'</h2>';
 						echo "<h3>".$result['GetWeatherResult']."</h3>";
-						print_r($result);
 					}
 				}
     		}
