@@ -54,22 +54,24 @@
 
     			require_once('lib/nusoap.php');
 
+                //Initialize new client
 				$client = new nusoap_client('http://www.webservicex.net/globalweather.asmx?wsdl', true);
 
 				$err = $client->getError();
+                //Check for client error
 				if ($err) {
 					echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 				}
-				// Doc/lit parameters get wrapped
-				$param = array('CityName' => $_POST['cityname'], 'CountryName' => $_POST['countryname']);
-				$result = $client->call('GetWeather', array('parameters' => $param));
-                $header = $client->getHeaders();
 
-                print_r($header);
-				
+                //Initialize parameters
+				$param = array('CityName' => $_POST['cityname'], 'CountryName' => $_POST['countryname']);
+
+                //Requesting to webservice
+				$result = $client->call('GetWeather', array('parameters' => $param));				
 
 				// Check for a fault
 				if ($client->fault) {
+                    //Display fault
 					echo '<h2>Fault</h2>';
 					print_r($result['faultstring']);
 				} else {
@@ -80,6 +82,7 @@
 						echo '<h2>Error</h2><pre>' . $err . '</pre>';
 					} 
                     else {
+                        //Display result
 						echo '<h2>Weather Information: '.$_POST['cityname'].' '.$_POST['countryname'].'</h2>';
 						echo "<h3>".$result['GetWeatherResult']."</h3>";
 					}

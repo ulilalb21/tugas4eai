@@ -52,20 +52,27 @@
 
 		    			require_once('lib/nusoap.php');
 
+		    			//Initialize new client
 						$client = new nusoap_client('http://www.webservicex.net/ConvertTemperature.asmx?wsdl', true);
 
 						$err = $client->getError();
+						//Check for client error
 						if ($err) {
+							//Display the error
 							echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 						}
-						// Doc/lit parameters get wrapped
+
+						//Initialize paramereters for request
 						$param = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeFahrenheit');
 						$param2 = array('Temperature' => $_POST['temperature'], 'FromUnit' => 'degreeCelsius', 'ToUnit' => 'degreeReaumur');
+						
+						//Requesting to web service
 						$result = $client->call('ConvertTemp', array('parameters' => $param));
 						$result2 = $client->call('ConvertTemp', array('parameters' => $param2));
 
 						// Check for a fault
 						if ($client->fault) {
+							//Display the fault
 							echo '<h2>Fault</h2>';
 							print_r($result['faultstring']);
 						} else {
@@ -75,6 +82,7 @@
 								// Display the error
 								echo '<h2>Error</h2><pre>' . $err . '</pre>';
 							} else {
+								//Display the result
 								echo "<h2>";
 								echo $_POST['temperature']."&deg;C = ".$result['ConvertTempResult']."&deg;F = ".$result2['ConvertTempResult']."&deg;R";
 								echo "</h2>";
